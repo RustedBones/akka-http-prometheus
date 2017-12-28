@@ -9,7 +9,7 @@ For more details about promethus, please see the [official documentation](https:
 and the [Java client library](https://github.com/prometheus/client_java)
 
 
-## Getting Akka Http Prometheus
+## Getting Akka Http Prometheus (WIP)
 
 akka-http-prometheus is deployed to Maven Central. Add it to your `build.sbt`:
 
