@@ -1,10 +1,8 @@
-import ReleaseTransformations._
-
 // General info
 val username = "RustedBones"
 val repo = "akka-http-prometheus"
 
-// Scala versions
+// Library versions
 lazy val akkaHttpVersion = "10.0.11"
 lazy val prometheusVersion = "0.1.0"
 lazy val scalaTestVersion = "3.0.4"
@@ -13,6 +11,7 @@ lazy val scalaTestVersion = "3.0.4"
 lazy val `akka-http-prometheus` = (project in file(".")).
   settings(
     organization := "fr.davit",
+    version := "0.1.0",
     scalaVersion := "2.12.4",
     crossScalaVersions := Seq("2.11.12", "2.12.4"),
     crossVersion := CrossVersion.binary,
@@ -26,7 +25,9 @@ lazy val `akka-http-prometheus` = (project in file(".")).
       "-Yno-adapted-args",
       "-Ywarn-dead-code",
       "-Ywarn-numeric-widen",
-      "-Ywarn-unused"
+      "-Ywarn-unused",
+      "-feature",
+      "-language:implicitConversions"
     ),
 
     libraryDependencies ++= Seq(
@@ -36,27 +37,12 @@ lazy val `akka-http-prometheus` = (project in file(".")).
       "org.scalatest" %% "scalatest" % scalaTestVersion % Test
     ),
 
-    releaseProcess := Seq[ReleaseStep](
-      checkSnapshotDependencies,
-      inquireVersions,
-      //runClean,
-      runTest,
-      setReleaseVersion,
-      commitReleaseVersion,
-      tagRelease,
-      releaseStepCommand("publishSigned"),
-      setNextVersion,
-      commitNextVersion,
-      releaseStepCommand("sonatypeReleaseAll"),
-      pushChanges
-    ),
-
     homepage := Some(url(s"https://github.com/$username/$repo")),
     licenses += "APACHE" -> url(s"https://github.com/$username/$repo/blob/master/LICENSE"),
     scmInfo := Some(ScmInfo(url(s"https://github.com/$username/$repo"), s"git@github.com:$username/$repo.git")),
-    apiURL := Some(url(s"https://$username.github.io/$repo/latest/api/")),
-    releaseCrossBuild := true,
-    releasePublishArtifactsAction := PgpKeys.publishSigned.value,
+    developers := List(
+      Developer(id=s"$username", name="Michel Davit", email="michel@davit.fr", url=url(s"https://github.com/$username"))
+    ),
     publishMavenStyle := true,
     publishArtifact in Test := false,
     publishTo := Some(if (isSnapshot.value) Opts.resolver.sonatypeSnapshots else Opts.resolver.sonatypeStaging),
