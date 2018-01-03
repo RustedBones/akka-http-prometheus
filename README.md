@@ -20,7 +20,7 @@ and the [Java client library](https://github.com/prometheus/client_java)
 akka-http-prometheus is deployed to Maven Central. Add it to your `build.sbt`:
 
 ```scala
-libraryDependencies += "fr.davit" %% "akka-http-prometheus" % "0.0.1"
+libraryDependencies += "fr.davit" %% "akka-http-prometheus" % "0.1.0"
 ```
 
 ## Quick Start
