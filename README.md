@@ -30,7 +30,7 @@ and expose all the registry's metrics on an HTTP endpoint.
 
 
 The simplest way to add those capabilities to your server is to import content from the `HttpMetricsRoute` and define the
-`HttpMetricsSettings` as implicit. Your route will have the `handleWithMetrics` capability that setup everything:
+`HttpMetricsSettings` as implicit. Your route will have the `withMetricsHandler` capability that setup everything:
 
 ```scala
 import akka.actor.ActorSystem
@@ -51,7 +51,7 @@ implicit val httpMetricsSettings = HttpMetricsSettings()
 val route: Route = ...
 
 
-Http().bindAndHandle(route.handleWithMetrics, "localhost", 8080)
+Http().bindAndHandle(route.withMetricsHandler, "localhost", 8080)
 ```
 
 ### Settings
