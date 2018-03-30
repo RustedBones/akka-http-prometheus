@@ -7,8 +7,8 @@ import akka.http.scaladsl.server.{ExceptionHandler, RejectionHandler, Route, Rou
 import akka.http.scaladsl.settings.{ParserSettings, RoutingSettings}
 import akka.stream.Materializer
 import akka.stream.scaladsl.Flow
-import fr.davit.akka.http.prometheus.scaladsl.server.settings.HttpMetricsSettings
 import fr.davit.akka.http.prometheus.scaladsl.server.HttpMetricsDirectives._
+import fr.davit.akka.http.prometheus.scaladsl.server.settings.HttpMetricsSettings
 
 import scala.concurrent.ExecutionContextExecutor
 

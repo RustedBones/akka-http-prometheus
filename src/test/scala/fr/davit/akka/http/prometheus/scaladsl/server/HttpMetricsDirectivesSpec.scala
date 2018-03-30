@@ -4,9 +4,10 @@ import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.{Directives, Route}
 import akka.http.scaladsl.testkit.ScalatestRouteTest
 import io.prometheus.client.CollectorRegistry
+import org.scalatest.concurrent.Eventually
 import org.scalatest.{Matchers, WordSpec}
 
-class HttpMetricsDirectivesSpec extends WordSpec with Matchers with ScalatestRouteTest {
+class HttpMetricsDirectivesSpec extends WordSpec with Matchers with ScalatestRouteTest with Eventually {
 
   import Directives._
   import HttpMetricsDirectives._
@@ -18,7 +19,7 @@ class HttpMetricsDirectivesSpec extends WordSpec with Matchers with ScalatestRou
 
     val exports: HttpMetricsExports = TestExports(new CollectorRegistry())
 
-    def getMetricSample(sample: String): Double = exports.registry.getSampleValue(sample)
+    def getMetricSample(sample: String): Option[Double] = Option(exports.registry.getSampleValue(sample))
 
     def innerRoute: Route
 
@@ -33,9 +34,11 @@ class HttpMetricsDirectivesSpec extends WordSpec with Matchers with ScalatestRou
       override val innerRoute: Route = complete(StatusCodes.OK)
 
       Get() ~> route ~> check {
-        getMetricSample(HttpMetricsExports.RequestsActiveSample) shouldBe 0.0
-        getMetricSample(HttpMetricsExports.RequestsCounterSample) shouldBe 1.0
-        getMetricSample(s"${HttpMetricsExports.RequestsDurationSample}_count") shouldBe 1.0
+        eventually {
+          getMetricSample(HttpMetricsExports.RequestsActiveSample) shouldBe Some(0.0)
+          getMetricSample(HttpMetricsExports.RequestsCounterSample) shouldBe Some(1.0)
+          getMetricSample(s"${HttpMetricsExports.RequestsDurationSample}_count") shouldBe Some(1.0)
+        }
       }
     }
 
@@ -44,18 +47,37 @@ class HttpMetricsDirectivesSpec extends WordSpec with Matchers with ScalatestRou
       override val innerRoute: Route = reject
 
       Get() ~> route ~> check {
-        getMetricSample(HttpMetricsExports.RequestsActiveSample) shouldBe 0.0
-        getMetricSample(HttpMetricsExports.RequestsCounterSample) shouldBe 1.0
-        getMetricSample(s"${HttpMetricsExports.RequestsDurationSample}_count") shouldBe 1.0
+        eventually {
+          getMetricSample(HttpMetricsExports.RequestsActiveSample) shouldBe Some(0.0)
+          getMetricSample(HttpMetricsExports.RequestsCounterSample) shouldBe Some(1.0)
+          getMetricSample(s"${HttpMetricsExports.RequestsDurationSample}_count") shouldBe Some(1.0)
+        }
+      }
+    }
+
+    "set the metrics in case of exception" in new Fixture {
+      override val innerRoute: Route = _ => throw new Exception("BOOM!")
+
+      Get() ~> route ~> check {
+        eventually {
+          getMetricSample(HttpMetricsExports.RequestsActiveSample) shouldBe Some(0.0)
+          getMetricSample(HttpMetricsExports.RequestsCounterSample) shouldBe Some(1.0)
+          getMetricSample(HttpMetricsExports.RequestsErrorCounterSample) shouldBe Some(1.0)
+          getMetricSample(s"${HttpMetricsExports.RequestsDurationSample}_count") shouldBe Some(1.0)
+        }
       }
     }
 
     "set the metrics in case of error" in new Fixture {
-      override val innerRoute: Route = _ => throw new Exception("BOOM!")
+      override val innerRoute: Route = failWith(new Exception("BOOM!"))
 
       Get() ~> route ~> check {
-        getMetricSample(HttpMetricsExports.RequestsActiveSample) shouldBe 0.0
-        getMetricSample(HttpMetricsExports.RequestsErrorCounterSample) shouldBe 1.0
+        eventually {
+          getMetricSample(HttpMetricsExports.RequestsActiveSample) shouldBe Some(0.0)
+          getMetricSample(HttpMetricsExports.RequestsCounterSample) shouldBe Some(1.0)
+          getMetricSample(HttpMetricsExports.RequestsErrorCounterSample) shouldBe Some(1.0)
+          getMetricSample(s"${HttpMetricsExports.RequestsDurationSample}_count") shouldBe Some(1.0)
+        }
       }
     }
 

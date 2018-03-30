@@ -3,16 +3,17 @@ val username = "RustedBones"
 val repo = "akka-http-prometheus"
 
 // Library versions
-lazy val akkaHttpVersion = "10.0.11"
-lazy val prometheusVersion = "0.1.0"
-lazy val scalaTestVersion = "3.0.4"
+lazy val akkaHttpVersion    = "10.1.0"
+lazy val akkaStreamVersion  = "2.5.11"
+lazy val prometheusVersion  = "0.3.0"
+lazy val scalaTestVersion   = "3.0.5"
 
 // akka-http-prometheus
 lazy val `akka-http-prometheus` = (project in file(".")).
   settings(
     organization := "fr.davit",
-    version := "0.1.0",
-    scalaVersion := "2.12.4",
+    version := "0.1.1",
+    scalaVersion := "2.12.5",
     crossScalaVersions := Seq("2.11.12", "2.12.4"),
     crossVersion := CrossVersion.binary,
 
@@ -31,10 +32,11 @@ lazy val `akka-http-prometheus` = (project in file(".")).
     ),
 
     libraryDependencies ++= Seq(
-      "com.typesafe.akka" %% "akka-http" % akkaHttpVersion,
-      "io.prometheus" % "simpleclient_common" % prometheusVersion,
-      "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpVersion % Test,
-      "org.scalatest" %% "scalatest" % scalaTestVersion % Test
+      "com.typesafe.akka" %% "akka-http"            % akkaHttpVersion,
+      "io.prometheus"     %  "simpleclient_common"  % prometheusVersion,
+      "com.typesafe.akka" %% "akka-stream"          % akkaStreamVersion   % Provided,
+      "com.typesafe.akka" %% "akka-http-testkit"    % akkaHttpVersion     % Test,
+      "org.scalatest"     %% "scalatest"            % scalaTestVersion    % Test
     ),
 
     homepage := Some(url(s"https://github.com/$username/$repo")),
