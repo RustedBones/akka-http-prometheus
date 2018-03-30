@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.1 (2018-01-03)
+## 0.1.1 (2018-03-30)
 
 - Better handling of route exception as well as response failure
 - Compute request duration also in case of failure

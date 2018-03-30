@@ -13,7 +13,7 @@ and the [Java client library](https://github.com/prometheus/client_java)
 
 | Version | Release date | Akka Http version | Scala versions      |
 | ------- | ------------ | ----------------- | ------------------- |
-| `0.1.1` | 2018-xx-xx   | `10.1.0`          | `2.11.12`, `2.12.5` |
+| `0.1.1` | 2018-03-30   | `10.1.0`          | `2.11.12`, `2.12.5` |
 | `0.1.0` | 2018-01-03   | `10.0.11`         | `2.11.12`, `2.12.4` |
 
 The complete list can be found in the [CHANGELOG](CHANGELOG.md) file.
