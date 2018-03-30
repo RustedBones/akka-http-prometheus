@@ -50,12 +50,25 @@ class HttpMetricsDirectivesSpec extends WordSpec with Matchers with ScalatestRou
       }
     }
 
-    "set the metrics in case of error" in new Fixture {
+    "set the metrics in case of exception" in new Fixture {
       override val innerRoute: Route = _ => throw new Exception("BOOM!")
 
       Get() ~> route ~> check {
         getMetricSample(HttpMetricsExports.RequestsActiveSample) shouldBe 0.0
+        getMetricSample(HttpMetricsExports.RequestsCounterSample) shouldBe 1.0
         getMetricSample(HttpMetricsExports.RequestsErrorCounterSample) shouldBe 1.0
+        getMetricSample(s"${HttpMetricsExports.RequestsDurationSample}_count") shouldBe 1.0
+      }
+    }
+
+    "set the metrics in case of error" in new Fixture {
+      override val innerRoute: Route = failWith(new Exception("BOOM!"))
+
+      Get() ~> route ~> check {
+        getMetricSample(HttpMetricsExports.RequestsActiveSample) shouldBe 0.0
+        getMetricSample(HttpMetricsExports.RequestsCounterSample) shouldBe 1.0
+        getMetricSample(HttpMetricsExports.RequestsErrorCounterSample) shouldBe 1.0
+        getMetricSample(s"${HttpMetricsExports.RequestsDurationSample}_count") shouldBe 1.0
       }
     }
 
