@@ -12,9 +12,9 @@ lazy val scalaTestVersion   = "3.0.5"
 lazy val `akka-http-prometheus` = (project in file(".")).
   settings(
     organization := "fr.davit",
-    version := "0.1.1",
+    version := "0.1.2-SNAPSHOT",
     scalaVersion := "2.12.5",
-    crossScalaVersions := Seq("2.11.12", "2.12.4"),
+    crossScalaVersions := Seq("2.11.12", "2.12.5"),
     crossVersion := CrossVersion.binary,
 
     scalacOptions ++= Seq(
