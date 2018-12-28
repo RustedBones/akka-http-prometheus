@@ -3,13 +3,19 @@
 [![Build Status](https://travis-ci.org/RustedBones/akka-http-prometheus.svg?branch=master&style=flat)](https://travis-ci.org/RustedBones/akka-http-prometheus)
 [![Software License](https://img.shields.io/badge/license-Apache%202-brightgreen.svg?style=flat)](LICENSE)
 
+
 This library aims to easily expose and collect prometheus formatted metrics in your akka-http server.
 
 For more details about promethus, please see the [official documentation](https://prometheus.io/docs/introduction/overview/)
 and the [Java client library](https://github.com/prometheus/client_java)
 
 
+## Disclaimer
+
+This project is deprecated. Now see [akka-http-metrics](https://github.com/RustedBones/akka-http-metrics) project
+
 ## Versions
+
 
 | Version | Release date | Akka Http version | Scala versions      |
 | ------- | ------------ | ----------------- | ------------------- |
